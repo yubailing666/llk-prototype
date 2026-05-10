@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>连连看 · 像素原型</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100dvh;
+    font-family: 'Press Start 2P', system-ui, monospace;
+    image-rendering: pixelated;
+  }
+
+  .game {
+    background: #16213e;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 0 4px #0f3460, 0 0 0 8px #1a1a2e;
+    max-width: min(95vw, 480px);
+    width: 100%;
+  }
+
+  /* ===== 顶栏 ===== */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0f3460;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+    font-size: 10px;
+    color: #e0e0e0;
+    letter-spacing: 0.5px;
+    border-bottom: 3px solid #e94560;
+  }
+
+  .top-bar .score { color: #f5c518; }
+  .top-bar .timer  { color: #e94560; }
+
+  /* ===== 棋盘 ===== */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+    background: #0f3460;
+    padding: 8px;
+    border-radius: 4px;
+    border: 2px solid #16213e;
+    aspect-ratio: 1;
+  }
+
+  .tile {
+    aspect-ratio: 1;
+    border: 2px solid #1a1a2e;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(18px, 5vw, 28px);
+    cursor: pointer;
+    transition: 0.08s;
+    position: relative;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.3);
+    background: #e8dcc0;
+    image-rendering: pixelated;
+  }
+
+  .tile:active {
+    transform: scale(0.92);
+  }
+
+  .tile.selected {
+    border-color: #f5c518;
+    box-shadow: 0 0 0 3px #f5c518, inset 0 -2px 0 rgba(0,0,0,0.3);
+  }
+
+  .tile.removed {
+    background: #0f3460;
+    border-color: #0f3460;
+    box-shadow: none;
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  /* ===== 棋子配色 ===== */
+  .tile-0  { background: #ff6b6b; }
+  .tile-1  { background: #feca57; }
+  .tile-2  { background: #48dbfb; }
+  .tile-3  { background: #ff9ff3; }
+  .tile-4  { background: #54a0ff; }
+  .tile-5  { background: #5f27cd; }
+  .tile-6  { background: #01a3a4; }
+  .tile-7  { background: #f368e0; }
+  .tile-8  { background: #ff6348; }
+  .tile-9  { background: #2ed573; }
+
+  /* ===== 底栏 ===== */
+  .bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+    gap: 8px;
+  }
+
+  .btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    padding: 10px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+    flex: 1;
+    text-align: center;
+    border-bottom: 3px solid rgba(0,0,0,0.3);
+    transition: 0.08s;
+  }
+
+  .btn:active {
+    transform: translateY(2px);
+    border-bottom-width: 1px;
+  }
+
+  .btn-start  { background: #e94560; }
+  .btn-hint   { background: #0f3460; border-color: #1a1a2e; }
+  .btn-reset  { background: #533483; }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 400px) {
+    .game { padding: 12px; }
+    .board { gap: 3px; padding: 6px; }
+    .top-bar { font-size: 8px; padding: 8px 10px; }
+    .btn { font-size: 7px; padding: 8px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="game" id="app">
+
+  <!-- 顶栏 -->
+  <div class="top-bar">
+    <span>👤 佰凌</span>
+    <span class="score">⭐ 0</span>
+    <span class="timer">⏱ 00:00</span>
+  </div>
+
+  <!-- 棋盘 8×8 -->
+  <div class="board" id="board"></div>
+
+  <!-- 底栏 -->
+  <div class="bottom-bar">
+    <button class="btn btn-start" id="btnStart">▶ START</button>
+    <button class="btn btn-hint"  id="btnHint">💡 提示</button>
+    <button class="btn btn-reset" id="btnReset">↺ 重置</button>
+  </div>
+
+</div>
+
+<script>
+  const TILES = ['🐱','🐶','🐰','🐼','🦊','🐸','🐧','🦄','🐯'];
+  const ROWS = 8, COLS = 8;
+  let board = [];
+  let selected = null;
+
+  // 生成一对一对的
+  function generateBoard() {
+    const total = ROWS * COLS;
+    const pairs = [];
+    for (let i = 0; i < total / 2; i++) {
+      const emoji = TILES[i % TILES.length];
+      pairs.push(emoji, emoji);
+    }
+    // 洗牌
+    for (let i = pairs.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+    }
+    return pairs.map((emoji, idx) => ({
+      emoji,
+      removed: false,
+      row: Math.floor(idx / COLS),
+      col: idx % COLS,
+    }));
+  }
+
+  function render() {
+    const el = document.getElementById('board');
+    el.innerHTML = '';
+    board.forEach((cell, idx) => {
+      const div = document.createElement('div');
+      div.className = 'tile tile-' + (TILES.indexOf(cell.emoji) % 10);
+      div.dataset.idx = idx;
+      if (cell.removed) div.classList.add('removed');
+      if (selected === idx) div.classList.add('selected');
+      div.textContent = cell.removed ? '' : cell.emoji;
+      div.addEventListener('click', () => handleClick(idx));
+      el.appendChild(div);
+    });
+  }
+
+  function handleClick(idx) {
+    if (board[idx].removed) return;
+    if (selected === null) {
+      selected = idx;
+      render();
+      return;
+    }
+    if (selected === idx) {
+      selected = null;
+      render();
+      return;
+    }
+    // 相同且不是同一个
+    const a = board[selected];
+    const b = board[idx];
+    if (a.emoji === b.emoji) {
+      a.removed = true;
+      b.removed = true;
+    }
+    selected = null;
+    render();
+  }
+
+  document.getElementById('btnReset').addEventListener('click', () => {
+    board = generateBoard();
+    selected = null;
+    render();
+  });
+
+  document.getElementById('btnStart').addEventListener('click', () => {
+    board = generateBoard();
+    selected = null;
+    render();
+    document.querySelector('.top-bar .timer').textContent = '⏱ 00:00';
+    document.querySelector('.top-bar .score').textContent = '⭐ 0';
+  });
+
+  // 初始化
+  board = generateBoard();
+  render();
+</script>
+</body>
+</html>
