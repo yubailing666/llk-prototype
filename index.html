@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>哈基米消消乐 · 原型v3</title>
+<title>Hajimi Match · Prototype</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -18,9 +18,9 @@
   #p-splash { background: linear-gradient(180deg,#b8a080,#8b7355 50%,#6b5b45); cursor: pointer; }
   .logo-g { width: 72px; height: 72px; display: grid; grid-template-columns: repeat(8,1fr); grid-template-rows: repeat(8,1fr); gap: 2px; margin-bottom: 14px; }
   .logo-g .px { border-radius: 1px; }
-  .tt { font-size: 24px; color: #f5e6c8; text-shadow: 0 2px 0 #6b5b45; letter-spacing: 3px; margin-bottom: 2px; }
+  .tt { font-size: 22px; color: #f5e6c8; text-shadow: 0 2px 0 #6b5b45; letter-spacing: 2px; margin-bottom: 2px; line-height: 1.4; }
   .tt .hl { color: #e8c87a; text-shadow: 0 2px 0 #8b7355; }
-  .sb { font-size: 7px; color: #c4b091; letter-spacing: 2px; margin-bottom: 30px; }
+  .sb { font-size: 6px; color: #c4b091; letter-spacing: 2px; margin-bottom: 30px; }
   .tap { font-size: 6px; color: #8a7a65; animation: blink 1.8s ease-in-out infinite; position: absolute; bottom: 36px; text-align: center; line-height: 1.6; }
   @keyframes blink { 0%,100%{opacity:0.3} 50%{opacity:1} }
 
@@ -28,55 +28,52 @@
   #p-login { background: linear-gradient(180deg,#6b5b45,#5c4a3a); }
   .login-box { background: #5c4a3a; border-radius: 6px; padding: 24px 20px; width: min(82%,260px); border: 2px solid #7a6a55; position: relative; }
   .login-box::before { content:"😸"; position:absolute; top:-16px; left:50%; transform:translateX(-50%); font-size:22px; }
-  .login-box h2 { color: #f5e6c8; font-size: 8px; text-align: center; margin-bottom: 14px; letter-spacing: 1px; }
+  .login-box h2 { color: #f5e6c8; font-size: 7px; text-align: center; margin-bottom: 14px; letter-spacing: 1px; }
   .login-i { width:100%; padding:8px 10px; margin-bottom:8px; background:#4a3d2e; border:2px solid #6b5b45; border-radius:3px; font-family:'Press Start 2P',monospace; font-size:7px; color:#f5e6c8; outline:none; }
   .login-i:focus { border-color:#e8c87a; }
   .login-i::placeholder { color:#7a6a55; }
   .login-r { display:flex; gap:6px; margin-top:4px; }
-  .login-b { flex:1; padding:8px 0; border:none; border-radius:3px; font-family:'Press Start 2P',monospace; font-size:7px; color:#f5e6c8; cursor:pointer; box-shadow:inset 0 -2px 0 rgba(0,0,0,0.2); transition:0.06s; }
+  .login-b { flex:1; padding:8px 0; border:none; border-radius:3px; font-family:'Press Start 2P',monospace; font-size:6px; color:#f5e6c8; cursor:pointer; box-shadow:inset 0 -2px 0 rgba(0,0,0,0.2); transition:0.06s; }
   .login-b:active { transform:translateY(2px); box-shadow:none; }
   .b-l { background:#8b7355; }
   .b-r { background:#6b5b45; }
 
-  /* 给猫起名 */
   .name-box { margin-top:10px; padding:10px; background:#4a3d2e; border-radius:4px; text-align:center; }
-  .name-box .nl { font-size:6px; color:#c4b091; margin-bottom:6px; }
-  .name-box .ni { width:100%; padding:6px; border:2px solid #7a6a55; border-radius:3px; background:#5c4a3a; font-family:'Press Start 2P',monospace; font-size:7px; color:#f5e6c8; text-align:center; outline:none; }
+  .name-box .nl { font-size:5px; color:#c4b091; margin-bottom:6px; }
+  .name-box .ni { width:100%; padding:6px; border:2px solid #7a6a55; border-radius:3px; background:#5c4a3a; font-family:'Press Start 2P',monospace; font-size:6px; color:#f5e6c8; text-align:center; outline:none; }
 
   /* ===== Game ===== */
   #p-game { background: #6b5b45; padding: 6px; gap: 0; }
 
-  /* StatusPanel — 4列 */
   .status { width:100%; display:grid; grid-template-columns:1.2fr 1fr 1.2fr 1fr; background:#5c4a3a; border-radius:4px; padding:4px 6px; min-height:48px; gap:2px; }
   .status .col { display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  .status .col .l { font-size:6px; color:#a09070; }
-  .status .col .v { font-size:12px; color:#f5e6c8; }
-  .status .col .v.score { color:#e8c87a; font-size:14px; }
+  .status .col .l { font-size:5px; color:#a09070; }
+  .status .col .v { font-size:11px; color:#f5e6c8; }
+  .status .col .v.score { color:#e8c87a; font-size:13px; }
   .status .col .v.timer { color:#c4785a; }
-  .status .col .v.used { color:#8a7a65; font-size:10px; }
+  .status .col .v.used { color:#8a7a65; font-size:9px; }
 
   .combo-box { grid-column:1/-1; text-align:center; font-size:6px; color:#e8c87a; min-height:0; transition:0.2s; overflow:hidden; }
   .combo-box.show { min-height:16px; padding-top:2px; }
 
-  /* Board */
   .b-wrap { flex:1; width:100%; display:flex; align-items:center; justify-content:center; position:relative; margin:4px 0; }
   .board { display:grid; grid-template-columns:repeat(6,1fr); gap:3px; width:94%; aspect-ratio:1; }
   .tile { aspect-ratio:1; border:2px solid #7a6a55; border-radius:2px; display:flex; align-items:center; justify-content:center; font-size:clamp(14px,4.5vw,22px); cursor:pointer; background:#d4c4a8; transition:0.06s; box-shadow:inset 0 -2px 0 rgba(0,0,0,0.12); }
   .tile:active { transform:scale(0.92); }
   .tile.sel { border-color:#e8c87a; box-shadow:0 0 0 3px #e8c87a, inset 0 -2px 0 rgba(0,0,0,0.12); }
 
-  /* ControlPanel — Start + 重新开始 */
   .ctrl { width:100%; display:flex; gap:6px; padding:4px 0; }
-  .ctrl .btn { flex:1; padding:10px 0; border:none; border-radius:3px; font-family:'Press Start 2P',monospace; font-size:7px; cursor:pointer; box-shadow:inset 0 -2px 0 rgba(0,0,0,0.2); transition:0.06s; }
-  .ctrl .btn:active { transform:translateY(2px); box-shadow:none; }
-  .ctrl .btn-start { background:#e8c87a; color:#4a3d2e; }
-  .ctrl .btn-reset { background:#6b5b45; color:#c4b091; }
+  .bt { flex:1; padding:10px 0; border:none; border-radius:3px; font-family:'Press Start 2P',monospace; font-size:6px; cursor:pointer; box-shadow:inset 0 -2px 0 rgba(0,0,0,0.2); transition:0.06s; }
+  .bt:active { transform:translateY(2px); box-shadow:none; }
+  .bt-start { background:#e8c87a; color:#4a3d2e; font-size:7px; flex:1.2; }
+  .bt-rst { background:#6b5b45; color:#c4b091; }
+  .bt-sm { background:#5c4a3a; color:#a09070; font-size:5px; }
 
   /* ===== Settings ===== */
   #p-settings { background:#6b5b45; padding:24px 20px; justify-content:flex-start; padding-top:32px; }
-  .stt { font-size:13px; color:#f5e6c8; text-shadow:0 2px 0 #5c4a3a; margin-bottom:16px; }
+  .stt { font-size:12px; color:#f5e6c8; text-shadow:0 2px 0 #5c4a3a; margin-bottom:16px; }
   .sg { width:100%; margin-bottom:14px; }
-  .sl { font-size:7px; color:#c4b091; margin-bottom:5px; }
+  .sl { font-size:6px; color:#c4b091; margin-bottom:5px; }
   .sr { display:flex; gap:5px; }
   .so { flex:1; padding:7px 0; border:2px solid #7a6a55; border-radius:3px; background:#5c4a3a; color:#a09070; text-align:center; font-family:'Press Start 2P',monospace; font-size:6px; cursor:pointer; transition:0.1s; }
   .so.active { border-color:#e8c87a; background:#4a3d2e; color:#e8c87a; }
@@ -91,7 +88,7 @@
 
   /* ===== Cattery ===== */
   #p-cat { background:#6b5b45; padding:20px 16px; justify-content:flex-start; padding-top:28px; }
-  .ct { font-size:13px; color:#f5e6c8; text-shadow:0 2px 0 #5c4a3a; margin-bottom:2px; }
+  .ct { font-size:12px; color:#f5e6c8; text-shadow:0 2px 0 #5c4a3a; margin-bottom:2px; }
   .cs { font-size:5px; color:#8a7a65; margin-bottom:14px; }
   .cl { width:100%; display:flex; flex-direction:column; gap:7px; }
   .cc { display:flex; align-items:center; gap:10px; background:#5c4a3a; border-radius:4px; padding:10px; border:2px solid #7a6a55; }
@@ -106,7 +103,7 @@
   .cc .ci .bw { margin-top:3px; height:3px; background:#4a3d2e; border-radius:2px; overflow:hidden; }
   .cc .ci .br { height:100%; background:#e8c87a; border-radius:2px; }
 
-  /* ===== 钓鱼 ===== */
+  /* ===== Fish anim ===== */
   .fo { position:absolute; inset:0; pointer-events:none; z-index:5; opacity:0; transition:opacity 0.3s; }
   .fo.a { opacity:1; }
   .w { position:absolute; bottom:0; left:0; right:0; height:28%; background:linear-gradient(180deg,transparent,#3a6b5c 40%,#2d5a4a); }
@@ -125,7 +122,6 @@
   .ft.s { transform:translate(-50%,-50%) scale(1); transition:transform 0.25s ease; }
   .ch { position:absolute; right:8%; bottom:3%; font-size:6px; color:#f5e6c8; opacity:0; transition:0.25s; }
   .ch.s { opacity:1; transform:translateY(-6px); transition:0.35s; }
-
   .cxs { font-size:14px; } .csm { font-size:18px; } .cmd { font-size:22px; } .clg { font-size:28px; } .cxl { font-size:34px; } .cxx { font-size:40px; }
 </style>
 </head>
@@ -133,49 +129,48 @@
 
 <div class="game">
 
-<!-- ===== Splash ===== -->
+<!-- ===== SPLASH ===== -->
 <div class="page" id="p-splash">
   <div class="logo-g" id="logoG"></div>
-  <div class="tt">哈基米<br><span class="hl">消消乐</span></div>
-  <div class="sb">找到一对 · 喂饱小猫</div>
-  <div class="tap">👆 随便点一下<br><span style="font-size:4px">带你的猫回家</span></div>
+  <div class="tt">HAJIMI<br><span class="hl">MATCH</span></div>
+  <div class="sb">FISH · FEED · GROW</div>
+  <div class="tap">👆 tap to start<br><span style="font-size:4px">your cat is waiting</span></div>
 </div>
 
-<!-- ===== Login + 给猫起名 ===== -->
+<!-- ===== LOGIN ===== -->
 <div class="page hidden" id="p-login">
   <div class="login-box">
-    <h2>✦ 欢迎来到猫岛 ✦</h2>
-    <input class="login-i" type="text" placeholder="账号" id="uid">
-    <input class="login-i" type="password" placeholder="密码" id="pwd">
+    <h2>✦ WELCOME TO CAT ISLAND ✦</h2>
+    <input class="login-i" type="text" placeholder="username" id="uid">
+    <input class="login-i" type="password" placeholder="password" id="pwd">
     <div class="login-r">
-      <button class="login-b b-l" id="btnL">进猫窝</button>
-      <button class="login-b b-r" id="btnR">新猫入住</button>
+      <button class="login-b b-l" id="btnL">LOGIN</button>
+      <button class="login-b b-r" id="btnR">REGISTER</button>
     </div>
     <div class="name-box">
-      <div class="nl">🐱 给你的小猫起个名字吧</div>
-      <input class="ni" type="text" placeholder="输入名字..." id="catName" value="咪咪">
+      <div class="nl">🐱 Name your kitten</div>
+      <input class="ni" type="text" placeholder="enter a name..." id="catName" value="Mimi">
     </div>
   </div>
 </div>
 
-<!-- ===== Game ===== -->
+<!-- ===== GAME ===== -->
 <div class="page hidden" id="p-game">
-  <!-- StatusPanel：4列 -->
   <div class="status">
     <div class="col">
-      <span class="l">分数</span>
+      <span class="l">SCORE</span>
       <span class="v score" id="sc">0</span>
     </div>
     <div class="col">
-      <span class="l">剩余时间</span>
-      <span class="v timer" id="tm">00:00</span>
+      <span class="l">TIME LEFT</span>
+      <span class="v timer" id="tm">01:00</span>
     </div>
     <div class="col">
-      <span class="l" id="prLbl">剩余可消除</span>
-      <span class="v" id="pr" style="font-size:9px">0对</span>
+      <span class="l" id="prLbl">LEFT</span>
+      <span class="v" id="pr" style="font-size:9px">18 pairs</span>
     </div>
     <div class="col">
-      <span class="l">已经用时</span>
+      <span class="l">ELAPSED</span>
       <span class="v used" id="ut">00:00</span>
     </div>
     <div class="combo-box" id="cbox"></div>
@@ -183,34 +178,32 @@
 
   <div class="b-wrap">
     <div class="board" id="board"></div>
-    <!-- 钓鱼动画 -->
     <div class="fo" id="fo">
       <div class="w"></div><div class="ws"></div>
       <div class="fl" id="fl"></div><div class="bb" id="bbob"></div>
       <div class="sp" id="spr"></div>
       <div class="fc" id="fc">🐟</div>
-      <div class="ft" id="ft">😸 好吃！</div>
-      <div class="ch" id="ch">呼噜呼噜~</div>
+      <div class="ft" id="ft">😸 Yum!</div>
+      <div class="ch" id="ch">purrr~</div>
     </div>
   </div>
 
-  <!-- ControlPanel：Start + 重新开始 + 设置 + 猫舍 -->
   <div class="ctrl">
-    <button class="btn btn-start" id="bStart" style="flex:1.2">▶ START</button>
-    <button class="btn btn-reset" id="bReset">↺ 重开</button>
+    <button class="bt bt-start" id="bStart">▶ START</button>
+    <button class="bt bt-rst" id="bReset">↺ RESTART</button>
   </div>
   <div class="ctrl" style="margin-top:-2px">
-    <button class="btn" style="background:#5c4a3a;color:#a09070;font-size:6px" id="bHint">💡 提示</button>
-    <button class="btn" style="background:#5c4a3a;color:#a09070;font-size:6px" id="bToSet">⚙ 设置</button>
-    <button class="btn" style="background:#5c4a3a;color:#a09070;font-size:6px" id="bToCat">🏠 猫舍</button>
+    <button class="bt bt-sm" id="bHint">💡 HINT</button>
+    <button class="bt bt-sm" id="bToSet">⚙ SETTINGS</button>
+    <button class="bt bt-sm" id="bToCat">🏠 CATTERY</button>
   </div>
 </div>
 
-<!-- ===== Settings ===== -->
+<!-- ===== SETTINGS ===== -->
 <div class="page hidden" id="p-settings">
-  <div class="stt">⚙ 设置</div>
+  <div class="stt">⚙ SETTINGS</div>
   <div class="sg">
-    <div class="sl">⏱ 时间限制</div>
+    <div class="sl">⏱ TIME LIMIT</div>
     <div class="sr" id="tOpts">
       <div class="so" data-v="60">60s</div>
       <div class="so active" data-v="120">120s</div>
@@ -219,34 +212,34 @@
     </div>
   </div>
   <div class="sg">
-    <div class="sl">🎯 难度</div>
+    <div class="sl">🎯 DIFFICULTY</div>
     <input type="range" class="ss" id="ds" min="3" max="6" value="4" step="1">
-    <div class="sh" id="dh">中等 · 4×4 网格</div>
+    <div class="sh" id="dh">Medium · 4×4 grid</div>
   </div>
   <div class="sg">
-    <div class="sl">🔊 音效</div>
+    <div class="sl">🔊 SOUND</div>
     <div class="sr" id="sOpts">
-      <div class="so active">开</div>
-      <div class="so">关</div>
+      <div class="so active">ON</div>
+      <div class="so">OFF</div>
     </div>
   </div>
-  <button class="sbtn">🔄 重新开始</button>
-  <button class="bbtn" id="bBackSet">↩ 返回游戏</button>
-  <div class="vi">🀄 哈基米消消乐 v1.0 · Java Swing</div>
+  <button class="sbtn">🔄 RESTART GAME</button>
+  <button class="bbtn" id="bBackSet">↩ BACK</button>
+  <div class="vi">🀄 HAJIMI MATCH v1.0 · Java Swing</div>
 </div>
 
-<!-- ===== Cattery ===== -->
+<!-- ===== CATTERY ===== -->
 <div class="page hidden" id="p-cat">
-  <div class="ct">🏠 猫舍</div>
-  <div class="cs">猫越肥越厉害</div>
+  <div class="ct">🏠 CATTERY</div>
+  <div class="cs">the fatter, the mightier</div>
   <div class="cl" id="catList"></div>
-  <button class="bbtn" id="bBackCat" style="margin-top:14px">↩ 回去钓鱼</button>
+  <button class="bbtn" id="bBackCat" style="margin-top:14px">↩ BACK TO FISHING</button>
 </div>
 
 </div>
 
 <script>
-// ===== 猫爪 =====
+// ===== Logo =====
 const lg=document.getElementById('logoG');
 for(let i=0;i<64;i++){const px=document.createElement('div');px.className='px';lg.appendChild(px)}
 const pa=[27,28,35,36,5,6,13,14,9,10,17,18,11,12,19,20,41,42,49,50,45,46,53,54];
@@ -255,12 +248,11 @@ const ap=lg.querySelectorAll('.px');
 pa.forEach(i=>ap[i].style.background='#e8dcc0');
 de.forEach(i=>{if(ap[i])ap[i].style.background='#c4b091'});
 
-// ===== 状态 =====
-const EM=['🐟','🐠','🐡','🦐','🥩','🍗','🥛','🧀','🥚','🦀','🐙','🍖']; // 猫能吃的
-const R=6,C=6; let board=[],sel=null,score=0,clv=1,ff=0,gameRunning=false;
+// ===== State =====
+const EM=['🐟','🐠','🐡','🦐','🥩','🍗','🥛','🧀','🥚','🦀','🐙','🍖'];
+const R=6,C=6; let board=[],sel=null,score=0,clv=1,ff=0,gameRunning=false,catName='Mimi';
 const csz=['🐱','🐱','🐈','🐈','🐅','🐅','🐱‍👤','🐱‍👤','🦁','🦁'];
-const cln=['小奶猫','小奶猫','肥猫','肥猫','大胖猫','小老虎','小老虎','虎王','狮王','猫中之神'];
-let catName='咪咪';
+const cln= new Array(10).fill('');
 
 function gb(){const t=R*C,p=[];for(let i=0;i<t/2;i++)p.push(EM[i%EM.length],EM[i%EM.length]);for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]]}return p.map((e,i)=>({emoji:e,rm:false}))}
 
@@ -275,7 +267,7 @@ function rb(){
     el.appendChild(d);
   });
   const cnt=board.filter(c=>!c.rm).length;
-  document.getElementById('pr').textContent=cnt/2+'对';
+  document.getElementById('pr').textContent=cnt/2+' pairs';
 }
 
 function ht(i){
@@ -287,117 +279,83 @@ function ht(i){
   else{sel=null;rb()}
 }
 
-// ===== 钓鱼 =====
 function fsh(){
   const o=document.getElementById('fo'),fl=document.getElementById('fl'),bb=document.getElementById('bbob'),
       sp=document.getElementById('spr'),fc=document.getElementById('fc'),ft=document.getElementById('ft'),
       ch=document.getElementById('ch');
   o.classList.add('a');
-  setTimeout(()=>{fl.classList.add('d');bb.classList.add('d')},30);
-  setTimeout(()=>sp.classList.add('a'),150);
-  setTimeout(()=>{sp.classList.remove('a');fc.classList.add('c');fc.textContent=['🐟','🐠','🐡','🦐','🦀','🐙'][Math.floor(Math.random()*6)]},350);
-  setTimeout(()=>{fc.classList.add('r');fl.classList.remove('d');bb.classList.remove('d');fc.classList.add('g');ft.classList.add('s');score+=100;ff++;clv=Math.min(10,1+Math.floor(ff/3));ui()},550);
-  setTimeout(()=>{ch.classList.add('s');ch.textContent=['😸 好吃！','😻 鱼！','😽 还要~','🐈 呼噜'][Math.floor(Math.random()*4)]},580);
-  setTimeout(()=>{ch.classList.remove('s');o.classList.remove('a');fl.classList.remove('d');bb.classList.remove('d');fc.classList.remove('c','r','g');ft.classList.remove('s');document.getElementById('cbox').classList.remove('show')},950);
-  // combo
-  document.getElementById('cbox').textContent='🔥 +100';
-  document.getElementById('cbox').classList.add('show');
+  setTimeout(()=>{fl.classList.add('d');bb.classList.add('d')},20);
+  setTimeout(()=>sp.classList.add('a'),120);
+  setTimeout(()=>{sp.classList.remove('a');fc.classList.add('c');fc.textContent=['🐟','🐠','🐡','🦐','🦀','🐙'][Math.floor(Math.random()*6)]},300);
+  setTimeout(()=>{fc.classList.add('r');fl.classList.remove('d');bb.classList.remove('d');fc.classList.add('g');ft.classList.add('s');score+=100;ff++;clv=Math.min(10,1+Math.floor(ff/3))},480);
+  setTimeout(()=>{ch.classList.add('s');ch.textContent=['😸 Yum!','😻 Fish!','😽 More~','🐈 Purrr'][Math.floor(Math.random()*4)]},520);
+  document.getElementById('cbox').textContent='🔥 +100';document.getElementById('cbox').classList.add('show');
+  setTimeout(()=>{ch.classList.remove('s');o.classList.remove('a');fl.classList.remove('d');bb.classList.remove('d');fc.classList.remove('c','r','g');ft.classList.remove('s');document.getElementById('cbox').classList.remove('show')},850);
 }
 
-function ui(){
-  const sz=clv<=2?'cxs':clv<=4?'csm':clv<=5?'cmd':clv<=7?'clg':clv<=9?'cxl':'cxx';
-  // update status
-}
-
-// ===== 页面切换 =====
+// ===== Pages =====
 document.getElementById('p-splash').addEventListener('click',()=>{
   document.getElementById('p-splash').classList.add('hidden');
   document.getElementById('p-login').classList.remove('hidden');
 });
 
-// 登录
 document.getElementById('btnL').addEventListener('click',()=>{
   const u=document.getElementById('uid').value.trim();
-  if(!u){alert('请输入账号 😸');return}
-  catName=document.getElementById('catName').value.trim()||'咪咪';
+  if(!u){alert('Enter your username 😸');return}
+  catName=document.getElementById('catName').value.trim()||'Mimi';
   document.getElementById('p-login').classList.add('hidden');
   document.getElementById('p-game').classList.remove('hidden');
 });
 document.getElementById('btnR').addEventListener('click',()=>{
   const u=document.getElementById('uid').value.trim();
-  if(!u){alert('请输入账号 😸');return}
-  catName=document.getElementById('catName').value.trim()||'咪咪';
+  if(!u){alert('Enter your username 😸');return}
+  catName=document.getElementById('catName').value.trim()||'Mimi';
   document.getElementById('p-login').classList.add('hidden');
   document.getElementById('p-game').classList.remove('hidden');
 });
 
-// Start
 document.getElementById('bStart').addEventListener('click',()=>{
-  gameRunning=true;
-  board=gb();sel=null;rb();
+  gameRunning=true;board=gb();sel=null;rb();
   document.getElementById('tm').textContent='01:00';
   document.getElementById('ut').textContent='00:00';
-  // Start后的start按钮可以变成灰色
 });
+document.getElementById('bReset').addEventListener('click',()=>{board=gb();sel=null;rb();score=0;ff=0;clv=1});
 
-document.getElementById('bReset').addEventListener('click',()=>{
-  if(!gameRunning){board=gb();sel=null;rb();return}
-  board=gb();sel=null;rb();score=0;ff=0;clv=1;
-  ui();
-});
-
-// 设置按钮
+// Settings & Cattery
 const game=document.getElementById('p-game'),setP=document.getElementById('p-settings'),catP=document.getElementById('p-cat');
 document.getElementById('bToSet').addEventListener('click',()=>{game.classList.add('hidden');setP.classList.remove('hidden')});
 document.getElementById('bToCat').addEventListener('click',oc);
-// 猫舍
+document.getElementById('bBackSet').addEventListener('click',()=>{setP.classList.add('hidden');game.classList.remove('hidden')});
+document.getElementById('bBackCat').addEventListener('click',()=>{catP.classList.add('hidden');game.classList.remove('hidden')});
+
+document.getElementById('bHint').addEventListener('click',()=>{
+  const a=board.filter(c=>!c.rm);
+  if(a.length>=2){const x=a[0],y=a.find(c=>c!==x&&c.emoji===x.emoji);if(y)alert(`Try matching ${x.emoji} with ${y.emoji}`);else alert('No hint available!')}
+});
+
 function oc(){
-  document.getElementById('p-game').classList.add('hidden');
-  document.getElementById('p-cat').classList.remove('hidden');
+  game.classList.add('hidden');catP.classList.remove('hidden');
   const ls=document.getElementById('catList');ls.innerHTML='';
-  const cats=[{name:catName,level:clv,fish:ff,score:score},
-    {name:'胖虎',level:Math.min(10,clv+Math.floor(Math.random()*3)),fish:ff+Math.floor(Math.random()*10),score:score+Math.floor(Math.random()*1000)},
-    {name:'大橘',level:Math.min(10,clv+Math.floor(Math.random()*4)-1),fish:ff+Math.floor(Math.random()*8),score:score+Math.floor(Math.random()*800)-300}]
+  const cats=[{name:catName,level:clv,fish:ff,score},
+    {name:'Tiger',level:Math.min(10,clv+Math.floor(Math.random()*3)),fish:ff+Math.floor(Math.random()*10),score:score+Math.floor(Math.random()*1000)},
+    {name:'Garfield',level:Math.min(10,clv+Math.floor(Math.random()*4)-1),fish:ff+Math.floor(Math.random()*8),score:score+Math.floor(Math.random()*800)-300},
+    {name:'Panther',level:Math.min(10,clv+Math.floor(Math.random()*5)-2),fish:ff+Math.floor(Math.random()*15),score:score+Math.floor(Math.random()*1200)-500}]
     .sort((a,b)=>b.score-a.score);
   cats.forEach((c,i)=>{
     const s=c.level<=2?'cxs':c.level<=4?'csm':c.level<=5?'cmd':c.level<=7?'clg':c.level<=9?'cxl':'cxx';
     const card=document.createElement('div');card.className='cc';
     const md=['🥇','🥈','🥉'];
-    card.innerHTML=`<div class="rk">${i<3?md[i]:'#'+(i+1)}</div><div class="ca ${s}">${csz[c.level-1]||'🐱'}</div><div class="ci"><div class="nm">${c.name}</div><div class="st">Lv.${c.level} · 🐟${c.fish}条 · ${c.score}分</div><div class="bw"><div class="br" style="width:${c.level*10}%"></div></div></div>`;
+    card.innerHTML=`<div class="rk">${i<3?md[i]:'#'+(i+1)}</div><div class="ca ${s}">${csz[c.level-1]||'🐱'}</div><div class="ci"><div class="nm">${c.name}</div><div class="st">Lv.${c.level} · 🐟${c.fish} · ${c.score}pts</div><div class="bw"><div class="br" style="width:${c.level*10}%"></div></div></div>`;
     ls.appendChild(card);
   });
 }
 
-document.getElementById('bBackCat').addEventListener('click',()=>{
-  document.getElementById('p-cat').classList.add('hidden');
-  document.getElementById('p-game').classList.remove('hidden');
-});
-// 设置按钮
-
-// 顶部的设置和猫舍按钮 — 通过底栏的隐藏按钮
-// 这里简化：点击status跳转
-
-// 时间选项
-document.querySelectorAll('#tOpts .so').forEach(el=>{
-  el.addEventListener('click',function(){
-    document.querySelectorAll('#tOpts .so').forEach(e=>e.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
+// Settings UI
+document.querySelectorAll('#tOpts .so').forEach(el=>{el.addEventListener('click',function(){document.querySelectorAll('#tOpts .so').forEach(e=>e.classList.remove('active'));this.classList.add('active')})});
 const ds=document.getElementById('ds'),dh=document.getElementById('dh');
-const dn=['简单 3×3','偏易 3×4','中等 4×4','较难 4×6'];
-ds.addEventListener('input',()=>{dh.textContent=dn[ds.value-3]||'自定义'});
-document.querySelectorAll('#sOpts .so').forEach(el=>{
-  el.addEventListener('click',function(){
-    document.querySelectorAll('#sOpts .so').forEach(e=>e.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
-
-document.getElementById('bBackSet').addEventListener('click',()=>{
-  document.getElementById('p-settings').classList.add('hidden');
-  document.getElementById('p-game').classList.remove('hidden');
-});
+const dn=['Easy 3×3','Lite 3×4','Medium 4×4','Hard 4×6'];
+ds.addEventListener('input',()=>{dh.textContent=dn[ds.value-3]||'Custom'});
+document.querySelectorAll('#sOpts .so').forEach(el=>{el.addEventListener('click',function(){document.querySelectorAll('#sOpts .so').forEach(e=>e.classList.remove('active'));this.classList.add('active')})});
 
 board=gb();rb();
 </script>
