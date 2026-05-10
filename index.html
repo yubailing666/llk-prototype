@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>哈基米消消乐 · 开屏</title>
+<title>哈基米消消乐 · 完整原型</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -20,6 +20,7 @@
     image-rendering: pixelated;
   }
 
+  /* ===== 游戏容器 ===== */
   .game {
     background: #3d2438;
     max-width: min(95vw, 420px);
@@ -30,113 +31,86 @@
     box-shadow: 0 0 0 6px #2d1b2e, 0 8px 32px rgba(0,0,0,0.6);
     position: relative;
     overflow: hidden;
-    cursor: pointer;
   }
 
-  /* ===== 开屏页 ===== */
-  .screen-splash {
+  /* ===== 页面容器 ===== */
+  .page {
     position: absolute;
     inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(180deg, #c9785a 0%, #3d2438 60%, #2d1b2e 100%);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-    z-index: 2;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 1;
   }
-  .screen-splash.hidden {
+  .page.hidden {
     opacity: 0;
     transform: scale(1.05);
     pointer-events: none;
+    z-index: 0;
   }
 
-  /* ===== Logo: 像素猫爪 ===== */
-  .logo {
-    width: 96px;
-    height: 96px;
-    margin-bottom: 18px;
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-    gap: 2px;
+  /* =============================================
+             第1页：开屏
+             ============================================= */
+  #page-splash {
+    background: linear-gradient(180deg, #c9785a 0%, #3d2438 60%, #2d1b2e 100%);
+    cursor: pointer;
   }
-  .px {
-    border-radius: 1px;
-  }
-  /* 猫爪图案 — 肉垫暗色，底色透明 */
-  .logo .px  { background: transparent; }
-  /* 主肉垫（中间大圆） */
-  .logo .px:nth-child(28) { background: #f5d9c4; }
-  .logo .px:nth-child(29) { background: #f5d9c4; }
-  .logo .px:nth-child(36) { background: #f5d9c4; }
-  .logo .px:nth-child(37) { background: #f5d9c4; }
-  /* 四个小肉垫 */
-  .logo .px:nth-child(6)  { background: #f5d9c4; }
-  .logo .px:nth-child(7)  { background: #f5d9c4; }
-  .logo .px:nth-child(10) { background: #f5d9c4; }
-  .logo .px:nth-child(11) { background: #f5d9c4; }
-  .logo .px:nth-child(22) { background: #f5d9c4; }
-  .logo .px:nth-child(23) { background: #f5d9c4; }
-  .logo .px:nth-child(26) { background: #f5d9c4; }
-  .logo .px:nth-child(27) { background: #f5d9c4; }
-  .logo .px:nth-child(42) { background: #f5d9c4; }
-  .logo .px:nth-child(43) { background: #f5d9c4; }
-  .logo .px:nth-child(46) { background: #f5d9c4; }
-  .logo .px:nth-child(47) { background: #f5d9c4; }
-  /* 一些装饰点 */
-  .logo .px:nth-child(5)  { background: #e8a87c; }
-  .logo .px:nth-child(12) { background: #e8a87c; }
-  .logo .px:nth-child(21) { background: #e8a87c; }
-  .logo .px:nth-child(14) { background: #e8a87c; }
-  .logo .px:nth-child(51) { background: #e8a87c; }
-  .logo .px:nth-child(52) { background: #e8a87c; }
-  .logo .px:nth-child(59) { background: #e8a87c; }
-  .logo .px:nth-child(60) { background: #e8a87c; }
 
-  /* 猫耳朵在头顶 */
   .ear {
     position: absolute;
     width: 28px; height: 28px;
     background: #3d2438;
-    top: -8px; z-index: 3;
+    top: -8px; z-index: 10;
     border-radius: 2px;
   }
   .ear-l { left: 30%; transform: rotate(-20deg); border-left: 3px solid #e8a87c; border-top: 3px solid #e8a87c; }
   .ear-r { right: 30%; transform: rotate(20deg); border-right: 3px solid #e8a87c; border-top: 3px solid #e8a87c; }
 
-  /* ===== 标题 ===== */
-  .title-wrap {
-    position: relative;
-    margin-bottom: 8px;
+  .logo-grid {
+    width: 80px; height: 80px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    gap: 2px;
+    margin-bottom: 18px;
   }
-  .title {
-    font-size: 26px;
-    color: #fce4d6;
-    text-shadow: 0 0 12px rgba(232,168,124,0.4), 0 3px 0 #a05a3a;
-    letter-spacing: 4px;
+  .logo-grid .px { border-radius: 1px; }
+
+  .splash-title {
+    font-size: 24px;
     line-height: 1.4;
     text-align: center;
+    color: #fce4d6;
+    text-shadow: 0 0 12px rgba(232,168,124,0.4), 0 3px 0 #a05a3a;
+    letter-spacing: 3px;
+    margin-bottom: 4px;
   }
-  .title .highlight {
-    color: #f5c518;
-    text-shadow: 0 0 12px rgba(245,197,24,0.5), 0 3px 0 #b8860b;
-  }
-  .subtitle {
+  .splash-title .hl { color: #f5c518; text-shadow: 0 0 12px rgba(245,197,24,0.5), 0 3px 0 #b8860b; }
+  .splash-sub {
     font-size: 7px;
     color: #d4a89a;
-    letter-spacing: 3px;
-    margin-bottom: 50px;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
   }
-
-  /* 喵叫装饰 */
-  .meow-bubble {
+  .tap-hint {
+    font-size: 7px;
+    color: #a0766a;
+    animation: blink 1.5s ease-in-out infinite;
     position: absolute;
-    top: 28%;
-    right: 12%;
-    font-size: 14px;
-    color: #fce4d6;
-    opacity: 0.3;
+    bottom: 38px;
+    text-align: center;
+    line-height: 1.6;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 0.3; }
+    50%      { opacity: 1; }
+  }
+  .meow-bubble {
+    position: absolute; top: 26%; right: 14%;
+    font-size: 14px; color: #fce4d6; opacity: 0.3;
     animation: floatBubble 3s ease-in-out infinite;
   }
   @keyframes floatBubble {
@@ -144,233 +118,675 @@
     50%      { transform: translateY(-8px) rotate(-10deg); opacity: 0.6; }
   }
 
-  /* ===== 轻触提示 ===== */
-  .tap-hint {
-    font-size: 7px;
-    color: #a0766a;
-    animation: blink 1.5s ease-in-out infinite;
-    position: absolute;
-    bottom: 40px;
-    text-align: center;
-  }
-  @keyframes blink {
-    0%, 100% { opacity: 0.3; }
-    50%      { opacity: 1; }
+  /* =============================================
+             第2页：游戏
+             ============================================= */
+  #page-game {
+    background: #2d1b2e;
+    padding: 10px;
+    gap: 0;
   }
 
-  /* ===== 漂浮小鱼干 ===== */
-  .float-fish {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .fish {
-    position: absolute;
-    font-size: 16px;
-    animation: floatUp linear infinite;
-    opacity: 0.12;
-  }
-  .fish:nth-child(1)  { left: 10%;  animation-duration: 9s; animation-delay: 0s; }
-  .fish:nth-child(2)  { left: 30%;  animation-duration: 11s; animation-delay: 2s; }
-  .fish:nth-child(3)  { left: 50%;  animation-duration: 8s; animation-delay: 1s; }
-  .fish:nth-child(4)  { left: 70%;  animation-duration: 10s; animation-delay: 3s; }
-  .fish:nth-child(5)  { left: 85%;  animation-duration: 9s; animation-delay: 0.5s; }
-  .fish:nth-child(6)  { left: 20%;  animation-duration: 12s; animation-delay: 4s; }
-  .fish:nth-child(7)  { left: 60%;  animation-duration: 8s; animation-delay: 2.5s; }
-  .fish:nth-child(8)  { left: 40%;  animation-duration: 10s; animation-delay: 1.8s; }
-
-  @keyframes floatUp {
-    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-    10%  { opacity: 0.12; }
-    90%  { opacity: 0.12; }
-    100% { transform: translateY(-60px) rotate(360deg); opacity: 0; }
-  }
-
-  /* ===== 登录页 ===== */
-  .screen-login {
-    position: absolute;
-    inset: 0;
+  /* 顶栏：分数 + 猫 */
+  .game-top {
+    width: 100%;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 8px 4px;
+    background: #3d2438;
+    border-radius: 6px;
+    border-bottom: 3px solid #e8a87c;
+  }
+  .score-area {
+    text-align: left;
+  }
+  .score-label {
+    font-size: 6px;
+    color: #a0766a;
+  }
+  .score-num {
+    font-size: 10px;
+    color: #f5c518;
+  }
+
+  .cat-area {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+  .cat-icon {
+    font-size: 22px;
+    transition: font-size 0.3s ease;
+    line-height: 1;
+  }
+  .cat-name {
+    font-size: 6px;
+    color: #d4a89a;
+    text-align: right;
+    line-height: 1.3;
+  }
+  .cat-name .level {
+    color: #f5c518;
+  }
+
+  /* 中间：棋盘区域（钓鱼动画覆盖层） */
+  .board-wrap {
+    flex: 1;
+    width: 100%;
+    display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(180deg, #3d2438 0%, #2d1b2e 100%);
-    z-index: 1;
-    transition: opacity 0.6s ease;
-  }
-  .screen-login.hidden {
-    opacity: 0;
-    pointer-events: none;
+    position: relative;
+    margin: 8px 0;
   }
 
-  .login-box {
-    background: #4a2e44;
-    border-radius: 8px;
-    padding: 30px 24px;
-    width: min(80%, 280px);
-    border: 2px solid #e8a87c;
+  .board {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3px;
+    width: 92%;
+    aspect-ratio: 1;
+  }
+  .tile {
+    aspect-ratio: 1;
+    border: 2px solid #4a2e44;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(16px, 5vw, 24px);
+    cursor: pointer;
+    background: #fce4d6;
+    transition: 0.08s;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
     position: relative;
   }
-  .login-box::before {
-    content: "🐱";
+  .tile:active { transform: scale(0.92); }
+  .tile.selected { border-color: #f5c518; box-shadow: 0 0 0 3px #f5c518; }
+
+  /* ===== 钓鱼动画覆盖层 ===== */
+  .fish-overlay {
     position: absolute;
-    top: -18px;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .fish-overlay.active {
+    opacity: 1;
+  }
+
+  /* 水面 */
+  .water {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 35%;
+    background: linear-gradient(180deg, transparent, #1a5a7a 40%, #0d3b5c);
+  }
+  .water-surface {
+    position: absolute;
+    bottom: 35%;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: #2a8aac;
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+
+  /* 鱼线 + 浮标 */
+  .fishing-line {
+    position: absolute;
+    top: 0;
     left: 50%;
+    width: 2px;
+    height: 0;
+    background: #888;
     transform: translateX(-50%);
-    font-size: 24px;
+    transition: height 0.6s ease;
   }
-  .login-box h2 {
-    color: #fce4d6;
+  .fishing-line.dropped { height: 55%; }
+
+  .bobber {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 10px; height: 10px;
+    background: #e94560;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: top 0.6s ease;
+  }
+  .bobber.dropped { top: 55%; }
+
+  /* 水花 */
+  .splash-ring {
+    position: absolute;
+    bottom: 35%;
+    left: 50%;
+    width: 0; height: 0;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.4);
+    transform: translate(-50%, 50%);
+    opacity: 0;
+  }
+  .splash-ring.active {
+    width: 40px; height: 20px;
+    opacity: 1;
+    transition: width 0.4s ease, height 0.4s ease, opacity 0.3s;
+  }
+
+  /* 上钩的鱼 */
+  .fish-caught {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    font-size: 20px;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.3s ease;
+  }
+  .fish-caught.caught {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .fish-caught.reeling {
+    transition: top 0.5s ease, transform 0.3s ease;
+    top: 20%;
+  }
+  .fish-caught.gone {
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  /* 喂猫文字 */
+  .feed-text {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    font-size: 8px;
+    color: #f5c518;
+    transform: translate(-50%, -50%) scale(0);
+    text-shadow: 0 0 6px rgba(245,197,24,0.6);
+  }
+  .feed-text.show {
+    transform: translate(-50%, -50%) scale(1);
+    transition: transform 0.3s ease;
+  }
+
+  /* 猫乐呵 */
+  .cat-happy {
+    position: absolute;
+    right: 10%;
+    bottom: 5%;
     font-size: 9px;
-    text-align: center;
-    margin-bottom: 20px;
-    letter-spacing: 2px;
+    color: #fce4d6;
+    opacity: 0;
+    transition: 0.3s;
   }
-  .login-input {
+  .cat-happy.show {
+    opacity: 1;
+    transform: translateY(-10px);
+    transition: 0.4s;
+  }
+
+  /* 底栏按钮 */
+  .game-bottom {
     width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 10px;
-    background: #2d1b2e;
-    border: 2px solid #4a2e44;
-    border-radius: 4px;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 9px;
-    color: #fce4d6;
-    outline: none;
-  }
-  .login-input:focus {
-    border-color: #e8a87c;
-  }
-  .login-input::placeholder {
-    color: #6d4c5e;
-  }
-  .login-row {
     display: flex;
-    gap: 8px;
-    margin-top: 6px;
+    gap: 6px;
+    margin-top: 4px;
   }
-  .login-btn {
+  .btn {
     flex: 1;
-    padding: 10px 0;
+    padding: 8px 0;
     border: none;
     border-radius: 4px;
     font-family: 'Press Start 2P', monospace;
-    font-size: 8px;
+    font-size: 6px;
     color: #fff;
     cursor: pointer;
     border-bottom: 3px solid rgba(0,0,0,0.3);
     transition: 0.08s;
+    text-align: center;
   }
-  .login-btn:active {
-    transform: translateY(2px);
-    border-bottom-width: 1px;
+  .btn:active { transform: translateY(2px); border-bottom-width: 1px; }
+  .btn-hint   { background: #5d3a56; }
+  .btn-reset  { background: #4a2e44; }
+  .btn-cat    { background: #c9785a; }
+
+  /* =============================================
+             第3页：猫舍（排行榜）
+             ============================================= */
+  #page-cattery {
+    background: #2d1b2e;
+    padding: 20px 16px;
+    justify-content: flex-start;
+    padding-top: 30px;
   }
-  .btn-login  { background: #c9785a; }
-  .btn-reg    { background: #5d3a56; }
+
+  .cattery-title {
+    font-size: 16px;
+    color: #fce4d6;
+    text-shadow: 0 2px 0 #a05a3a;
+    margin-bottom: 4px;
+  }
+  .cattery-sub {
+    font-size: 6px;
+    color: #a0766a;
+    margin-bottom: 20px;
+  }
+
+  .cat-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cat-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #3d2438;
+    border-radius: 8px;
+    padding: 12px;
+    border: 2px solid #4a2e44;
+    transition: 0.3s;
+  }
+  .cat-card:nth-child(1) { border-color: #f5c518; }
+  .cat-card:nth-child(2) { border-color: #aaa; }
+  .cat-card:nth-child(3) { border-color: #c9785a; }
+
+  .cat-card .rank {
+    font-size: 14px;
+    width: 24px;
+    text-align: center;
+  }
+  .cat-card .cat {
+    font-size: 28px;
+    transition: font-size 0.3s;
+  }
+  .cat-card .info {
+    flex: 1;
+  }
+  .cat-card .info .name {
+    font-size: 7px;
+    color: #fce4d6;
+    margin-bottom: 2px;
+  }
+  .cat-card .info .stats {
+    font-size: 5px;
+    color: #a0766a;
+  }
+  .cat-card .info .bar-wrap {
+    margin-top: 4px;
+    height: 4px;
+    background: #2d1b2e;
+    border-radius: 2px;
+    overflow: hidden;
+    width: 100%;
+  }
+  .cat-card .info .bar {
+    height: 100%;
+    background: #f5c518;
+    border-radius: 2px;
+    transition: width 0.5s;
+  }
+
+  .back-btn {
+    margin-top: 20px;
+    padding: 10px 0;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #fff;
+    cursor: pointer;
+    border-bottom: 3px solid rgba(0,0,0,0.3);
+    background: #5d3a56;
+    width: 100%;
+    text-align: center;
+  }
+  .back-btn:active { transform: translateY(2px); border-bottom-width: 1px; }
+
+  /* ===== 猫大小映射 ===== */
+  .cat-xs { font-size: 16px; }
+  .cat-s  { font-size: 20px; }
+  .cat-m  { font-size: 26px; }
+  .cat-l  { font-size: 32px; }
+  .cat-xl { font-size: 38px; }
+  .cat-xxl{ font-size: 46px; }
 </style>
 </head>
 <body>
 
 <div class="game" id="app">
-
-  <!-- 猫耳朵 -->
   <div class="ear ear-l"></div>
   <div class="ear ear-r"></div>
 
-  <!-- 漂浮小鱼干 -->
-  <div class="float-fish">
-    <div class="fish">🐟</div><div class="fish">🐟</div>
-    <div class="fish">🐟</div><div class="fish">🐟</div>
-    <div class="fish">🐟</div><div class="fish">🐟</div>
-    <div class="fish">🐟</div><div class="fish">🐟</div>
-  </div>
-
-  <!-- ====== 开屏页 ====== -->
-  <div class="screen-splash" id="splash">
-
-    <!-- 像素猫爪 Logo -->
-    <div class="logo" id="logo"></div>
-
-    <div class="title-wrap">
-      <div class="title">哈基米<br><span class="highlight">消消乐</span></div>
-      <div class="meow-bubble">🐱 喵 ~</div>
-    </div>
-    <div class="subtitle">找到一对 · 喂饱小猫</div>
-
+  <!-- ==================== 第1页：开屏 ==================== -->
+  <div class="page" id="page-splash">
+    <div class="logo-grid" id="logoGrid"></div>
+    <div class="splash-title">哈基米<br><span class="hl">消消乐</span></div>
+    <div class="splash-sub">找到一对 · 喂饱小猫</div>
+    <div class="meow-bubble">🐱 喵 ~</div>
     <div class="tap-hint">
       👆 轻触开始<br>
-      <span style="font-size:6px; opacity:0.5">哈基米哈基米~</span>
+      <span style="font-size:5px;opacity:0.5">钓一条鱼 · 猫就大一分</span>
     </div>
   </div>
 
-  <!-- ====== 登录页 ====== -->
-  <div class="screen-login hidden" id="login">
-    <div class="login-box">
-      <h2>✦ 欢迎回来铲屎官 ✦</h2>
-      <input class="login-input" type="text"     placeholder="账号" id="username">
-      <input class="login-input" type="password" placeholder="密码" id="password">
-      <div class="login-row">
-        <button class="login-btn btn-login">进猫窝</button>
-        <button class="login-btn btn-reg">新猫入住</button>
+  <!-- ==================== 第2页：游戏 ==================== -->
+  <div class="page hidden" id="page-game">
+    <!-- 顶栏 -->
+    <div class="game-top">
+      <div class="score-area">
+        <div class="score-label">分数</div>
+        <div class="score-num" id="scoreDisplay">0</div>
+      </div>
+      <div class="cat-area" id="catBtn">
+        <div>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <span>🐟</span>
+            <span style="font-size:6px;color:#fce4d6;" id="fishCount">0</span>
+          </div>
+        </div>
+        <div class="cat-icon" id="gameCatIcon">🐱</div>
+        <div class="cat-name">
+          <span id="catNameDisplay">咪咪</span><br>
+          <span class="level" id="catLevelDisplay">Lv.1</span>
+        </div>
       </div>
     </div>
+
+    <!-- 棋盘 -->
+    <div class="board-wrap">
+      <div class="board" id="board"></div>
+
+      <!-- 钓鱼动画层 -->
+      <div class="fish-overlay" id="fishOverlay">
+        <div class="water"></div>
+        <div class="water-surface"></div>
+        <div class="fishing-line" id="fishingLine"></div>
+        <div class="bobber" id="bobber"></div>
+        <div class="splash-ring" id="splashRing"></div>
+        <div class="fish-caught" id="fishCaught">🐟</div>
+        <div class="feed-text" id="feedText">🐱 好吃！</div>
+        <div class="cat-happy" id="catHappy">😸 喵~</div>
+      </div>
+    </div>
+
+    <!-- 底栏 -->
+    <div class="game-bottom">
+      <button class="btn btn-hint" id="btnHint">💡提示</button>
+      <button class="btn btn-reset" id="btnReset">↺重开</button>
+      <button class="btn btn-cat" id="btnCattery">🏠猫舍</button>
+    </div>
   </div>
 
+  <!-- ==================== 第3页：猫舍 ==================== -->
+  <div class="page hidden" id="page-cattery">
+    <div class="cattery-title">🏠 猫舍</div>
+    <div class="cattery-sub">猫越肥越厉害</div>
+    <div class="cat-list" id="catList"></div>
+    <button class="back-btn" id="backToGame">↩ 回去钓鱼</button>
+  </div>
 </div>
 
 <script>
-  // 用 JS 绘制像素猫爪（8×8）
-  const logo = document.getElementById('logo');
+  // ============================
+  // 猫爪 Logo（JS 绘制）
+  // ============================
+  const grid = document.getElementById('logoGrid');
   for (let i = 0; i < 64; i++) {
     const px = document.createElement('div');
     px.className = 'px';
-    logo.appendChild(px);
+    grid.appendChild(px);
+  }
+  const pawPixels = [27,28,35,36, 5,6,13,14, 9,10,17,18, 11,12,19,20, 41,42,49,50, 45,46,53,54];
+  const decorPx = [2,7,15,22,23,30,31,38,39,58,61];
+  const allPx = grid.querySelectorAll('.px');
+  pawPixels.forEach(i => allPx[i].style.background = '#f5d9c4');
+  decorPx.forEach(i => { if (allPx[i]) allPx[i].style.background = '#e8a87c'; });
+
+  // ============================
+  // 状态
+  // ============================
+  const TILES = ['🍣','🍙','🥟','🧁','🍩','🍪','🥕','🧀','🍎','🍤','🥚','🍇'];
+  const ROWS = 6, COLS = 6;
+  let board = [];
+  let selected = null;
+  let score = 0;
+  let catLevel = 1;      // 1~10
+  let fishFed = 0;
+  let catName = '咪咪';
+
+  const catSizes = ['🐱','🐱','🐈','🐈','🐈‍⬛','🐅','🐅','🐱‍👤','🦁','🦁'];
+  const catLevelNames = ['小奶猫','小奶猫','肥猫','肥猫','大胖猫','小老虎','大老虎','虎王','狮王','猫中之神'];
+
+  // ============================
+  // 棋盘
+  // ============================
+  function genBoard() {
+    const total = ROWS * COLS;
+    const pairs = [];
+    for (let i = 0; i < total / 2; i++) {
+      pairs.push(TILES[i % TILES.length], TILES[i % TILES.length]);
+    }
+    for (let i = pairs.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+    }
+    return pairs.map((emoji, idx) => ({ emoji, removed: false, row: Math.floor(idx / COLS), col: idx % COLS }));
   }
 
-  // 配成猫爪形的像素
-  const pawPixels = [
-    // 主肉垫（中心）
-    27,28,35,36,
-    // 左小肉垫
-    5,6,13,14,
-    // 上小肉垫
-    9,10,17,18,
-    // 右小肉垫
-    11,12,19,20,
-    // 下左
-    41,42,49,50,
-    // 下右
-    45,46,53,54,
-  ];
-  const allPx = logo.querySelectorAll('.px');
-  pawPixels.forEach(i => { allPx[i].style.background = '#f5d9c4'; });
-  // 装饰/爪尖
-  [2,7,15,22,23,30,31,38,39,58,61].forEach(i => {
-    if (allPx[i]) allPx[i].style.background = '#e8a87c';
+  function renderBoard() {
+    const el = document.getElementById('board');
+    el.innerHTML = '';
+    board.forEach((cell, idx) => {
+      const div = document.createElement('div');
+      div.className = 'tile';
+      div.dataset.idx = idx;
+      if (cell.removed) { div.style.visibility = 'hidden'; div.style.pointerEvents = 'none'; }
+      if (selected === idx) div.classList.add('selected');
+      div.textContent = cell.removed ? '' : cell.emoji;
+      div.addEventListener('click', () => handleTile(idx));
+      el.appendChild(div);
+    });
+    updateUI();
+  }
+
+  // ============================
+  // 消除 → 钓鱼动画 → 喂猫
+  // ============================
+  function handleTile(idx) {
+    if (board[idx].removed) return;
+    if (selected === null) { selected = idx; renderBoard(); return; }
+    if (selected === idx) { selected = null; renderBoard(); return; }
+    const a = board[selected], b = board[idx];
+    if (a.emoji === b.emoji) {
+      a.removed = true; b.removed = true;
+      selected = null;
+      renderBoard();
+      // 钓鱼 + 喂猫
+      doFishing();
+    } else {
+      selected = null;
+      renderBoard();
+    }
+  }
+
+  function doFishing() {
+    const overlay = document.getElementById('fishOverlay');
+    const line = document.getElementById('fishingLine');
+    const bobber = document.getElementById('bobber');
+    const ring = document.getElementById('splashRing');
+    const fish = document.getElementById('fishCaught');
+    const feedText = document.getElementById('feedText');
+    const catHappy = document.getElementById('catHappy');
+
+    overlay.classList.add('active');
+
+    // Phase 1: 鱼线放下
+    setTimeout(() => {
+      line.classList.add('dropped');
+      bobber.classList.add('dropped');
+    }, 100);
+
+    // Phase 2: 水花 + 鱼上钩
+    setTimeout(() => {
+      ring.classList.add('active');
+    }, 700);
+
+    // Phase 3: 鱼跳出水面
+    setTimeout(() => {
+      ring.classList.remove('active');
+      fish.classList.add('caught');
+      fish.textContent = ['🐟','🐠','🐡','🦐','🦀','🐙'][Math.floor(Math.random()*6)];
+    }, 1100);
+
+    // Phase 4: 收线
+    setTimeout(() => {
+      fish.classList.add('reeling');
+      line.classList.remove('dropped');
+      bobber.classList.remove('dropped');
+    }, 1600);
+
+    // Phase 5: 鱼消失 + 喂猫
+    setTimeout(() => {
+      fish.classList.add('gone');
+      feedText.classList.add('show');
+      // 更新分数
+      score += 100;
+      fishFed++;
+      const oldLevel = catLevel;
+      catLevel = Math.min(10, 1 + Math.floor(fishFed / 3));
+      updateUI();
+      // 猫闪光提示
+      const catIcon = document.getElementById('gameCatIcon');
+      catIcon.style.transform = 'scale(1.3)';
+      setTimeout(() => catIcon.style.transform = 'scale(1)', 300);
+    }, 2200);
+
+    // Phase 6: 猫开心
+    setTimeout(() => {
+      feedText.classList.remove('show');
+      catHappy.classList.add('show');
+      catHappy.textContent = ['😸 好吃！','😻 鱼！','😽 还要~','🐈 呼噜呼噜'][Math.floor(Math.random()*4)];
+    }, 2600);
+
+    // Phase 7: 结束
+    setTimeout(() => {
+      catHappy.classList.remove('show');
+      overlay.classList.remove('active');
+      line.classList.remove('dropped');
+      bobber.classList.remove('dropped');
+      fish.classList.remove('caught', 'reeling', 'gone');
+      feedText.classList.remove('show');
+    }, 3500);
+  }
+
+  // ============================
+  // UI 更新
+  // ============================
+  function updateUI() {
+    const sizeClass = getCatSizeClass(catLevel);
+    const icon = document.getElementById('gameCatIcon');
+    icon.textContent = catSizes[catLevel - 1] || '🐱';
+    icon.className = 'cat-icon ' + sizeClass;
+    document.getElementById('catLevelDisplay').textContent = 'Lv.' + catLevel + ' ' + catLevelNames[catLevel - 1];
+    document.getElementById('fishCount').textContent = fishFed;
+    document.getElementById('scoreDisplay').textContent = score;
+    document.getElementById('catNameDisplay').textContent = catName;
+  }
+
+  function getCatSizeClass(level) {
+    if (level <= 2) return 'cat-xs';
+    if (level <= 4) return 'cat-s';
+    if (level <= 5) return 'cat-m';
+    if (level <= 7) return 'cat-l';
+    if (level <= 9) return 'cat-xl';
+    return 'cat-xxl';
+  }
+
+  // ============================
+  // 猫舍（排行榜）
+  // ============================
+  function openCattery() {
+    document.getElementById('page-game').classList.add('hidden');
+    document.getElementById('page-cattery').classList.remove('hidden');
+    renderCattery();
+  }
+
+  function renderCattery() {
+    const list = document.getElementById('catList');
+    list.innerHTML = '';
+    // 生成几条模拟数据
+    const cats = [
+      { name: catName, level: catLevel, fish: fishFed, score: score, mine: true },
+      { name: '胖虎', level: Math.min(10, catLevel + Math.floor(Math.random()*3)), fish: fishFed + Math.floor(Math.random()*10), score: score + Math.floor(Math.random()*1000) },
+      { name: '大橘', level: Math.min(10, catLevel + Math.floor(Math.random()*4)-1), fish: fishFed + Math.floor(Math.random()*8), score: score + Math.floor(Math.random()*800)-300 },
+      { name: '黑豹', level: Math.min(10, catLevel + Math.floor(Math.random()*5)-2), fish: fishFed + Math.floor(Math.random()*15), score: score + Math.floor(Math.random()*1200)-500 },
+      { name: '小白', level: Math.min(10, catLevel + Math.floor(Math.random()*2)+1), fish: fishFed + Math.floor(Math.random()*5), score: score + Math.floor(Math.random()*600)+100 },
+    ].sort((a,b) => b.score - a.score);
+
+    cats.forEach((c, i) => {
+      const card = document.createElement('div');
+      card.className = 'cat-card';
+      const medals = ['🥇','🥈','🥉'];
+      card.innerHTML = `
+        <div class="rank">${i < 3 ? medals[i] : '#'+(i+1)}</div>
+        <div class="cat ${getCatSizeClass(c.level)}">${catSizes[c.level-1]||'🐱'}</div>
+        <div class="info">
+          <div class="name">${c.mine ? '⭐ ' : ''}${c.name}</div>
+          <div class="stats">Lv.${c.level} · 🐟${c.fish}条 · ${c.score}分</div>
+          <div class="bar-wrap"><div class="bar" style="width:${c.level * 10}%"></div></div>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  document.getElementById('backToGame').addEventListener('click', () => {
+    document.getElementById('page-cattery').classList.add('hidden');
+    document.getElementById('page-game').classList.remove('hidden');
   });
 
-  // 交互
-  const splash = document.getElementById('splash');
-  const login  = document.getElementById('login');
+  document.getElementById('btnCattery').addEventListener('click', openCattery);
+  document.getElementById('catBtn').addEventListener('click', openCattery);
 
-  splash.addEventListener('click', () => {
-    splash.classList.add('hidden');
-    login.classList.remove('hidden');
+  // ============================
+  // 页面切换
+  // ============================
+  document.getElementById('page-splash').addEventListener('click', () => {
+    document.getElementById('page-splash').classList.add('hidden');
+    document.getElementById('page-game').classList.remove('hidden');
   });
 
-  document.querySelector('.btn-login').addEventListener('click', () => {
-    const u = document.getElementById('username').value.trim();
-    const p = document.getElementById('password').value.trim();
-    if (!u || !p) { alert('请输入账号和密码 🐱'); return; }
-    alert(`欢迎回窝，${u}！🐾`);
+  document.getElementById('btnReset').addEventListener('click', () => {
+    board = genBoard();
+    selected = null;
+    renderBoard();
   });
-  document.querySelector('.btn-reg').addEventListener('click', () => {
-    const u = document.getElementById('username').value.trim();
-    const p = document.getElementById('password').value.trim();
-    if (!u || !p) { alert('请输入账号和密码 🐱'); return; }
-    alert(`新成员 ${u} 入住猫窝！🎉`);
+
+  document.getElementById('btnHint').addEventListener('click', () => {
+    // 简单提示：随便高亮第一个可消对
+    const active = board.filter(c => !c.removed);
+    if (active.length >= 2) {
+      const a = active[0], b = active.find(c => c !== a && c.emoji === a.emoji);
+      if (b) alert(`试试消掉 ${a.emoji} 和 ${b.emoji} 😸`);
+      else alert('想不出提示了，换个位置试试~');
+    }
   });
+
+  // ============================
+  // 初始化
+  // ============================
+  board = genBoard();
+  renderBoard();
 </script>
 </body>
 </html>
