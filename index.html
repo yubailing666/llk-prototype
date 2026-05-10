@@ -256,7 +256,7 @@ pa.forEach(i=>ap[i].style.background='#e8dcc0');
 de.forEach(i=>{if(ap[i])ap[i].style.background='#c4b091'});
 
 // ===== 状态 =====
-const EM=['🍣','🍙','🥟','🧁','🍩','🍪','🥕','🧀','🍎','🍤','🥚','🍇'];
+const EM=['🐟','🐠','🐡','🦐','🥩','🍗','🥛','🧀','🥚','🦀','🐙','🍖']; // 猫能吃的
 const R=6,C=6; let board=[],sel=null,score=0,clv=1,ff=0,gameRunning=false;
 const csz=['🐱','🐱','🐈','🐈','🐅','🐅','🐱‍👤','🐱‍👤','🦁','🦁'];
 const cln=['小奶猫','小奶猫','肥猫','肥猫','大胖猫','小老虎','小老虎','虎王','狮王','猫中之神'];
@@ -293,17 +293,15 @@ function fsh(){
       sp=document.getElementById('spr'),fc=document.getElementById('fc'),ft=document.getElementById('ft'),
       ch=document.getElementById('ch');
   o.classList.add('a');
-  setTimeout(()=>{fl.classList.add('d');bb.classList.add('d')},80);
-  setTimeout(()=>sp.classList.add('a'),500);
-  setTimeout(()=>{sp.classList.remove('a');fc.classList.add('c');fc.textContent=['🐟','🐠','🐡','🦐','🦀','🐙'][Math.floor(Math.random()*6)]},900);
-  setTimeout(()=>{fc.classList.add('r');fl.classList.remove('d');bb.classList.remove('d')},1300);
-  setTimeout(()=>{fc.classList.add('g');ft.classList.add('s');score+=100;ff++;const ol=clv;clv=Math.min(10,1+Math.floor(ff/3));ui();const ci=document.getElementById('gci');if(ci){ci.style.transform='scale(1.2)';setTimeout(()=>ci.style.transform='scale(1)',200)}},1800);
-  setTimeout(()=>{ft.classList.remove('s');ch.classList.add('s');ch.textContent=['😸 好吃！','😻 鱼！','😽 还要~','🐈 呼噜'][Math.floor(Math.random()*4)]},2200);
-  setTimeout(()=>{ch.classList.remove('s');o.classList.remove('a');fl.classList.remove('d');bb.classList.remove('d');fc.classList.remove('c','r','g');ft.classList.remove('s')},3000);
+  setTimeout(()=>{fl.classList.add('d');bb.classList.add('d')},30);
+  setTimeout(()=>sp.classList.add('a'),150);
+  setTimeout(()=>{sp.classList.remove('a');fc.classList.add('c');fc.textContent=['🐟','🐠','🐡','🦐','🦀','🐙'][Math.floor(Math.random()*6)]},350);
+  setTimeout(()=>{fc.classList.add('r');fl.classList.remove('d');bb.classList.remove('d');fc.classList.add('g');ft.classList.add('s');score+=100;ff++;clv=Math.min(10,1+Math.floor(ff/3));ui()},550);
+  setTimeout(()=>{ch.classList.add('s');ch.textContent=['😸 好吃！','😻 鱼！','😽 还要~','🐈 呼噜'][Math.floor(Math.random()*4)]},580);
+  setTimeout(()=>{ch.classList.remove('s');o.classList.remove('a');fl.classList.remove('d');bb.classList.remove('d');fc.classList.remove('c','r','g');ft.classList.remove('s');document.getElementById('cbox').classList.remove('show')},950);
   // combo
-  document.getElementById('cbox').textContent='🔥 连击 x1！';
+  document.getElementById('cbox').textContent='🔥 +100';
   document.getElementById('cbox').classList.add('show');
-  setTimeout(()=>document.getElementById('cbox').classList.remove('show'),2500);
 }
 
 function ui(){
